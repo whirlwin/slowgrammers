@@ -1,0 +1,45 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "slowgrammers",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-06",
+  "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": true,
+  "preview_urls": false,
+
+  // Static page and assets. API paths go to the Worker first.
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "not_found_handling": "404-page",
+    "run_worker_first": ["/api/*"]
+  },
+
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "slowgrammers",
+      "database_id": "c8bff2ef-5f65-4fd7-b924-d676d0a42a12",
+      "migrations_dir": "./migrations"
+    }
+  ],
+
+  // Workers AI always runs remotely, also in `wrangler dev`.
+  "ai": { "binding": "AI", "remote": true },
+
+  "vars": {
+    // Any Workers AI text generation model with function calling and the
+    // OpenAI compatible `messages`/`tools` interface.
+    "AI_MODEL": "@cf/zai-org/glm-5.3-flash"
+  },
+
+  // VOTE_SALT is a secret: `wrangler secret put VOTE_SALT`, locally in .dev.vars.
+  "secrets": { "required": ["VOTE_SALT"] },
+
+  // Caps calls to /api/agent per voter, since every call costs model tokens.
+  "ratelimits": [
+    { "name": "AGENT_LIMITER", "namespace_id": "1001", "simple": { "limit": 6, "period": 60 } }
+  ],
+
+  "observability": { "enabled": true, "head_sampling_rate": 1 }
+}

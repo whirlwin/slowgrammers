@@ -1,0 +1,410 @@
+/* Slowgrammers: a line printer report on continuous fanfold greenbar paper. */
+
+:root {
+  --desk: #c7d1cc;
+  --paper: #fbfdf8;
+  --band: #e1efdc;
+  --rule: #8fb38a;
+  --ink: #1d2a3a;
+  --ink-soft: #4f5f5b;
+  --ribbon: #a3241a;
+  --link: #1f4e8c;
+  --hole: #c7d1cc;
+  --focus: #1f4e8c;
+  --field: #ffffff;
+  --shadow: 0 1px 0 rgba(29, 42, 58, 0.08), 0 18px 40px -24px rgba(29, 42, 58, 0.45);
+
+  --mono: "Courier Prime", "Courier New", Courier, monospace;
+  --serif: "Literata", Georgia, "Times New Roman", serif;
+
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --desk: #0f1518;
+    --paper: #1a2327;
+    --band: #1e3029;
+    --rule: #3f6650;
+    --ink: #e3e9e1;
+    --ink-soft: #a3b3ac;
+    --ribbon: #ff9483;
+    --link: #8fc1ff;
+    --hole: #0f1518;
+    --focus: #8fc1ff;
+    --field: #141c1f;
+    --shadow: 0 18px 40px -24px rgba(0, 0, 0, 0.8);
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--desk);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+}
+
+a { color: var(--link); text-underline-offset: 0.18em; }
+a:hover { text-decoration-thickness: 2px; }
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.desk { padding: 32px 16px 56px; }
+
+/* The sheet: fanfold paper with tractor feed holes punched down both margins. */
+.sheet {
+  position: relative;
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 40px 64px 32px;
+  background-color: var(--paper);
+  background-image:
+    radial-gradient(circle at 50% 50%, var(--hole) 0 5px, transparent 5.5px),
+    radial-gradient(circle at 50% 50%, var(--hole) 0 5px, transparent 5.5px);
+  background-size: 28px 24px, 28px 24px;
+  background-position: left 0 top 0, right 0 top 0;
+  background-repeat: repeat-y, repeat-y;
+  box-shadow: var(--shadow);
+}
+
+/* Perforation lines that separate the feed strips from the page. */
+.sheet::before, .sheet::after {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 0;
+  border-left: 1px dashed var(--rule);
+  opacity: 0.7;
+}
+.sheet::before { left: 36px; }
+.sheet::after { right: 36px; }
+
+/* Masthead */
+.masthead { text-align: left; }
+
+.job {
+  margin: 0 0 20px;
+  font-family: var(--mono);
+  font-size: 0.875rem;
+  color: var(--ink-soft);
+}
+
+h1 { margin: 0; }
+
+.banner {
+  margin: 0;
+  font-family: var(--mono);
+  font-weight: 700;
+  /* 71 columns that must fit the sheet: scale with the viewport, cap on desktop. */
+  font-size: clamp(5.5px, 1.6vw, 17px);
+  line-height: 1.05;
+  letter-spacing: 0;
+  color: var(--ink);
+  overflow: hidden;
+  white-space: pre;
+}
+
+.lede {
+  max-width: 62ch;
+  margin: 24px 0 0;
+  font-size: 1.125rem;
+}
+
+h2 {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 1.375rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+/* Console: where you ask the agent to vote */
+.console {
+  margin: 40px 0 0;
+  padding: 20px 0 8px;
+  border-top: 2px solid var(--ink);
+}
+
+.console-note {
+  max-width: 62ch;
+  margin: 8px 0 16px;
+  color: var(--ink-soft);
+}
+
+.console-form label {
+  display: block;
+  margin-bottom: 6px;
+  font-family: var(--mono);
+  font-size: 0.9375rem;
+}
+
+.console-form textarea {
+  display: block;
+  width: 100%;
+  min-height: 5.5em;
+  padding: 10px 12px;
+  font: 1rem/1.5 var(--mono);
+  color: var(--ink);
+  background: var(--field);
+  border: 1.5px solid var(--ink);
+  border-radius: 0;
+  resize: vertical;
+}
+
+.console-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.char-count {
+  font-family: var(--mono);
+  font-size: 0.875rem;
+  color: var(--ink-soft);
+}
+
+button {
+  font: 700 1rem/1 var(--mono);
+  padding: 12px 18px;
+  color: var(--paper);
+  background: var(--ink);
+  border: 1.5px solid var(--ink);
+  border-radius: 0;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 var(--rule);
+}
+button:hover { box-shadow: 1px 1px 0 var(--rule); transform: translate(2px, 2px); }
+button:disabled { opacity: 0.6; cursor: progress; box-shadow: none; transform: none; }
+
+.transcript {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0;
+  font-family: var(--mono);
+  font-size: 0.9375rem;
+}
+.transcript li {
+  padding: 8px 0 8px 12px;
+  border-left: 3px solid var(--rule);
+  margin-bottom: 8px;
+  overflow-wrap: anywhere;
+}
+.transcript .who { font-weight: 700; margin-right: 0.5ch; }
+.transcript .agent { border-left-color: var(--ink); }
+.transcript .voted { border-left-color: var(--ribbon); }
+.transcript .voted .who { color: var(--ribbon); }
+.transcript .error { border-left-color: var(--ribbon); color: var(--ribbon); }
+.transcript .pending { color: var(--ink-soft); font-style: italic; }
+
+/* Roster: the report body, one greenbar band per inductee. */
+.roster {
+  margin-top: 40px;
+  border-top: 2px solid var(--ink);
+  padding-top: 20px;
+}
+
+.roster-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 16px;
+  margin-bottom: 12px;
+}
+
+.roster-status {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 0.875rem;
+  color: var(--ink-soft);
+}
+
+.entries {
+  list-style: none;
+  margin: 0 -20px;
+  padding: 0;
+}
+
+.entry {
+  display: grid;
+  grid-template-columns: 4.5rem 1fr auto;
+  gap: 4px 20px;
+  padding: 20px;
+}
+.entry:nth-child(odd) { background: var(--band); }
+
+.entry-rank {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 2.25rem;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.entry:first-child .entry-rank { color: var(--ribbon); }
+
+.entry-body { min-width: 0; }
+
+.entry-who {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 12px;
+}
+
+.entry-name {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+.entry-handle, .entry-followers {
+  font-family: var(--mono);
+  font-size: 0.9375rem;
+}
+.entry-followers { color: var(--ink-soft); }
+
+.entry-quote {
+  margin: 12px 0 10px;
+  padding: 0 0 0 16px;
+  border-left: 3px solid var(--rule);
+}
+.entry-quote p {
+  margin: 0;
+  max-width: 60ch;
+  font-style: italic;
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+.entry-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 0.875rem;
+  color: var(--ink-soft);
+}
+
+.entry-votes {
+  text-align: right;
+  font-family: var(--mono);
+  line-height: 1.1;
+}
+.votes-num {
+  display: block;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--ribbon);
+  font-variant-numeric: tabular-nums;
+}
+.votes-label { font-size: 0.8125rem; color: var(--ink-soft); }
+
+/* Empty state: a blank report waiting for its first record. */
+.empty {
+  margin: 8px -20px 0;
+  padding: 40px 20px 44px;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      var(--band) 0 48px,
+      transparent 48px 96px
+    );
+  text-align: center;
+}
+.empty-title {
+  margin: 0 auto;
+  max-width: 28ch;
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 1.375rem;
+  line-height: 1.4;
+}
+.empty-sub {
+  margin: 12px auto 0;
+  max-width: 44ch;
+  color: var(--ink-soft);
+}
+
+.colophon {
+  margin-top: 40px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--rule);
+  font-family: var(--mono);
+  font-size: 0.8125rem;
+  color: var(--ink-soft);
+}
+.colophon p { margin: 0; }
+
+/* Narrow screens: thinner feed strips, rank stacks above the votes. */
+@media (max-width: 640px) {
+  .desk { padding: 16px 8px 32px; }
+  .sheet {
+    padding: 28px 30px 24px;
+    background-size: 16px 20px, 16px 20px;
+    background-image:
+      radial-gradient(circle at 50% 50%, var(--hole) 0 3px, transparent 3.5px),
+      radial-gradient(circle at 50% 50%, var(--hole) 0 3px, transparent 3.5px);
+  }
+  .sheet::before { left: 20px; }
+  .sheet::after { right: 20px; }
+  .entries, .empty { margin-left: -8px; margin-right: -8px; }
+  .entry {
+    grid-template-columns: auto 1fr;
+    padding: 16px 8px;
+    gap: 4px 12px;
+  }
+  .entry-rank { font-size: 1.5rem; }
+  .entry-body { grid-column: 1 / -1; grid-row: 2; }
+  .entry-votes { grid-column: 2; grid-row: 1; align-self: center; }
+  .votes-num { display: inline; font-size: 1.25rem; margin-right: 0.5ch; }
+  .console-actions { flex-direction: column-reverse; align-items: stretch; }
+  .char-count { text-align: right; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* The one moment of motion: a freshly voted row prints in. */
+  .entry.just-voted { animation: print-in 900ms steps(6, end); }
+  @keyframes print-in {
+    from { background-color: var(--rule); }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  button:hover { transform: none; }
+}
+
+/* The wide banner is 71 columns; below 640px a stacked 47 column version takes over. */
+.banner-narrow { display: none; }
+@media (max-width: 640px) {
+  .banner-wide { display: none; }
+  .banner-narrow {
+    display: block;
+    font-size: clamp(5.5px, 2.65vw, 14px);
+  }
+}
