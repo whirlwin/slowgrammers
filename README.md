@@ -55,6 +55,14 @@ npx wrangler d1 execute slowgrammers --remote --command "INSERT OR IGNORE INTO s
 
 `post_url` is unique, so `INSERT OR IGNORE` makes re running the scraper safe. `added_at` is filled in automatically.
 
+For a batch, write the scraped posts to a JSON array of `{handle, display_name, followers, quote, post_url, posted_at}` and run:
+
+```sh
+scripts/add-entries.sh entries.json
+```
+
+The script escapes the SQL, drops anything under 10k followers or with a post URL that is not an `x.com` status link, and inserts the rest with `INSERT OR IGNORE`.
+
 To remove an entry (its votes go with it):
 
 ```sh
