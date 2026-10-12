@@ -1,6 +1,6 @@
 # Slowgrammers
 
-A satirical hall of fame for people on X who publicly reject vibe coding and AI assisted programming. Each inductee is shown with their own words, quoted verbatim and linked to the original post.
+A satirical hall of fame for people on X who have publicly come out against vibe coding. Each inductee is shown with their own words, quoted verbatim and linked to the original post.
 
 The joke: there is no vote button. The only way to vote is to ask an AI agent to cast the vote for you.
 

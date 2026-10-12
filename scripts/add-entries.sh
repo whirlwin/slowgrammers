@@ -5,7 +5,7 @@
 # Safe to re-run: post_url is UNIQUE and rows are inserted with INSERT OR IGNORE.
 set -euo pipefail
 
-file="${1:?usage: $0 entries.json}"
+file="$(cd "$(dirname "$1")" && pwd)/$(basename "$1")"
 sql="$(mktemp -t slowgrammers).sql"
 trap 'rm -f "$sql"' EXIT
 
@@ -17,5 +17,13 @@ jq -r '
   | "INSERT OR IGNORE INTO slowgrammers (handle, display_name, followers, quote, post_url, posted_at) VALUES (\(.handle|q), \(.display_name|q), \(.followers|floor), \(.quote|q), \(.post_url|q), \(.posted_at|q));"
 ' "$file" > "$sql"
 
-echo "Inserting $(wc -l < "$sql" | tr -d ' ') entries"
+# Quotes can contain newlines, so count statements rather than lines.
+count="$(grep -c '^INSERT' "$sql" || true)"
+if [ "$count" -eq 0 ]; then
+  echo "Nothing new to insert"
+  exit 0
+fi
+
+echo "Inserting up to $count entries (existing post URLs are skipped)"
+cd "$(dirname "$0")/.."
 npx wrangler d1 execute slowgrammers --remote --file "$sql"
