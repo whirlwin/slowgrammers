@@ -10,6 +10,8 @@ const input = document.getElementById("agent-message");
 const submit = document.getElementById("agent-submit");
 const counter = document.getElementById("char-count");
 const transcript = document.getElementById("transcript");
+const statInductees = document.getElementById("stat-inductees");
+const statVotes = document.getElementById("stat-votes");
 
 const numberFormat = new Intl.NumberFormat("en");
 const dateFormat = new Intl.DateTimeFormat("en", { year: "numeric", month: "short", day: "numeric", timeZone: "UTC" });
@@ -39,27 +41,29 @@ function renderEntries(entries, highlightId) {
   const count = entries.length;
   emptyEl.hidden = count !== 0;
   statusEl.textContent =
-    count === 0 ? "0 records." : `${count} ${count === 1 ? "record" : "records"}, ranked by votes.`;
+    count === 0 ? "Nobody yet." : "Ranked by votes, highest first.";
+  statInductees.textContent = numberFormat.format(count);
+  statVotes.textContent = numberFormat.format(entries.reduce((sum, e) => sum + (Number(e.votes) || 0), 0));
 
   entries.forEach((entry, i) => {
     const node = template.content.firstElementChild.cloneNode(true);
     const handle = String(entry.handle ?? "").replace(/^@/, "");
 
-    node.querySelector(".rank-num").textContent = `#${i + 1}`;
-    node.querySelector(".entry-name").textContent = String(entry.display_name ?? handle);
+    node.querySelector(".rank-num").textContent = String(i + 1);
+    node.querySelector(".plaque-name").textContent = String(entry.display_name ?? handle);
 
-    const handleLink = node.querySelector(".entry-handle");
+    const handleLink = node.querySelector(".plaque-handle");
     handleLink.textContent = `@${handle}`;
     const profile = profileUrl(handle);
     if (profile) handleLink.href = profile;
     else handleLink.removeAttribute("target");
 
     const followers = Number(entry.followers) || 0;
-    node.querySelector(".entry-followers").textContent = `${numberFormat.format(followers)} followers`;
-    node.querySelector(".entry-quote p").textContent = String(entry.quote ?? "");
-    node.querySelector(".entry-date").textContent = formatDate(entry.posted_at);
+    node.querySelector(".plaque-followers").textContent = `${numberFormat.format(followers)} followers`;
+    node.querySelector(".plaque-quote p").textContent = String(entry.quote ?? "");
+    node.querySelector(".plaque-date").textContent = formatDate(entry.posted_at);
 
-    const postLink = node.querySelector(".entry-post");
+    const postLink = node.querySelector(".plaque-post");
     const post = safePostUrl(entry.post_url);
     if (post) postLink.href = post;
     else postLink.remove();
@@ -67,6 +71,15 @@ function renderEntries(entries, highlightId) {
     const votes = Number(entry.votes) || 0;
     node.querySelector(".votes-num").textContent = numberFormat.format(votes);
     node.querySelector(".votes-label").textContent = votes === 1 ? "vote" : "votes";
+    node.querySelector(".medal").setAttribute("aria-label", `${numberFormat.format(votes)} ${votes === 1 ? "vote" : "votes"}`);
+
+    // Voting still goes through the agent: this only drafts the request.
+    node.querySelector(".plaque-vote").addEventListener("click", () => {
+      input.value = `Please cast my vote for @${handle}.`;
+      updateCounter();
+      input.focus();
+      input.scrollIntoView({ block: "center", behavior: "smooth" });
+    });
 
     if (highlightId !== undefined && entry.id === highlightId) node.classList.add("just-voted");
     entriesEl.append(node);
@@ -80,7 +93,7 @@ async function loadEntries(highlightId) {
     const data = await res.json();
     renderEntries(Array.isArray(data) ? data : [], highlightId);
   } catch {
-    statusEl.textContent = "The printer jammed. Reload the page to try again.";
+    statusEl.textContent = "Could not load the inductees. Reload the page to try again.";
   }
 }
 
@@ -89,7 +102,7 @@ function addLine(kind, who, text) {
   li.className = kind;
   const label = document.createElement("span");
   label.className = "who";
-  label.textContent = `${who}:`;
+  label.textContent = who;
   li.append(label, document.createTextNode(text));
   transcript.append(li);
   return li;
@@ -112,7 +125,7 @@ form.addEventListener("submit", async (event) => {
 
   submit.disabled = true;
   addLine("you", "You", message);
-  const pending = addLine("agent pending", "Agent", "Considering your request, reluctantly.");
+  const pending = addLine("agent pending", "Clerk", "Considering your request, reluctantly.");
   input.value = "";
   updateCounter();
 
@@ -134,10 +147,10 @@ form.addEventListener("submit", async (event) => {
     if (!res.ok && !data.reply) {
       addLine("error", "Error", reply);
     } else if (data.voted) {
-      addLine("agent voted", "Agent", reply);
+      addLine("agent voted", "Clerk", reply);
       await loadEntries(data.voted.entry_id);
     } else {
-      addLine(res.ok ? "agent" : "error", "Agent", reply);
+      addLine(res.ok ? "agent" : "error", "Clerk", reply);
     }
   } catch {
     pending.remove();

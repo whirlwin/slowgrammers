@@ -4,90 +4,85 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Slowgrammers</title>
-<meta name="description" content="A satirical hall of fame for people on X who publicly refuse to let AI help them write code.">
+<meta name="description" content="A satirical hall of fame for people on X who have publicly come out against vibe coding.">
 <meta name="color-scheme" content="light dark">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 fill=%22%23e1efdc%22/%3E%3Ctext x=%2216%22 y=%2224%22 font-family=%22Courier New,monospace%22 font-weight=%22700%22 font-size=%2224%22 text-anchor=%22middle%22 fill=%22%231d2a3a%22%3ES%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Ccircle cx=%2216%22 cy=%2216%22 r=%2215%22 fill=%22%23a8732f%22/%3E%3Ccircle cx=%2216%22 cy=%2216%22 r=%2211.5%22 fill=%22none%22 stroke=%22%23f3dcb4%22 stroke-width=%221.5%22/%3E%3Ctext x=%2216%22 y=%2222%22 font-family=%22Georgia,serif%22 font-weight=%22700%22 font-size=%2216%22 text-anchor=%22middle%22 fill=%22%23f3dcb4%22%3ES%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="/styles.css">
 <script src="/app.js" defer></script>
 </head>
 <body>
-<div class="desk">
-  <main class="sheet" id="top">
-    <header class="masthead">
-      <p class="job">Job 0001, printed by hand, one character at a time</p>
-      <h1>
-        <span class="visually-hidden">Slowgrammers</span>
-<pre class="banner banner-narrow" aria-hidden="true"> SSSS L      OOO  W   W
-S     L     O   O W   W
- SSS  L     O   O W W W
-    S L     O   O WW WW
-SSSS  LLLLL  OOO  W   W
+<div class="hall">
+  <header class="masthead">
+    <p class="eyebrow">The Hall of Fame for Hand Written Code</p>
+    <h1 class="wordmark">Slowgrammers</h1>
+    <p class="lede">Honouring the people on X who have publicly come out against vibe coding. Every inductee is enshrined in their own words, quoted verbatim and linked to the source.</p>
+    <dl class="stats" aria-label="Hall statistics">
+      <div><dt>Inductees</dt><dd id="stat-inductees">0</dd></div>
+      <div><dt>Votes cast by AI</dt><dd id="stat-votes">0</dd></div>
+      <div><dt>Votes cast by hand</dt><dd>0</dd></div>
+    </dl>
+  </header>
 
- GGGG RRRR   AAA  M   M M   M EEEEE RRRR   SSSS
-G     R   R A   A MM MM MM MM E     R   R S
-G  GG RRRR  AAAAA M M M M M M EEEE  RRRR   SSS
-G   G R  R  A   A M   M M   M E     R  R      S
- GGGG R   R A   A M   M M   M EEEEE R   R SSSS</pre>
-<pre class="banner banner-wide" aria-hidden="true"> SSSS L      OOO  W   W  GGGG RRRR   AAA  M   M M   M EEEEE RRRR   SSSS
-S     L     O   O W   W G     R   R A   A MM MM MM MM E     R   R S
- SSS  L     O   O W W W G  GG RRRR  AAAAA M M M M M M EEEE  RRRR   SSS
-    S L     O   O WW WW G   G R  R  A   A M   M M   M E     R  R      S
-SSSS  LLLLL  OOO  W   W  GGGG R   R A   A M   M M   M EEEEE R   R SSSS</pre>
-      </h1>
-      <p class="lede">A hall of fame for people on X who have publicly come out against vibe coding. Each inductee is honoured with their own words, quoted verbatim and linked to the source.</p>
-    </header>
-
-    <section class="console" aria-labelledby="console-title">
-      <h2 id="console-title">Cast a vote (via AI, obviously)</h2>
-      <p class="console-note">There is no vote button. Tell the agent who deserves your vote and it will cast it for you. One vote per person, per inductee, per day.</p>
-      <form id="agent-form" class="console-form">
-        <label for="agent-message">Your request to the agent</label>
-        <textarea id="agent-message" name="message" rows="3" maxlength="500" required placeholder="Vote for @someone, they deserve it for refusing autocomplete."></textarea>
-        <div class="console-actions">
-          <span id="char-count" class="char-count" aria-live="off">0 / 500</span>
-          <button type="submit" id="agent-submit">Ask the agent to vote</button>
-        </div>
-      </form>
-      <ol id="transcript" class="transcript" aria-live="polite" aria-label="Conversation with the voting agent"></ol>
-    </section>
-
-    <section class="roster" aria-labelledby="roster-title">
-      <div class="roster-head">
-        <h2 id="roster-title">The inductees</h2>
-        <p id="roster-status" class="roster-status" role="status">Loading the printout.</p>
+  <div class="layout">
+    <section class="wall" aria-labelledby="roster-title">
+      <div class="wall-head">
+        <h2 id="roster-title">The Inductees</h2>
+        <p id="roster-status" class="roster-status" role="status">Polishing the plaques.</p>
       </div>
       <ol id="entries" class="entries"></ol>
       <div id="empty" class="empty" hidden>
-        <p class="empty-title">No slowgrammers inducted yet. The scraper is out looking.</p>
-        <p class="empty-sub">The paper is loaded and the ribbon is fresh. Check back after the next scrape.</p>
+        <p class="empty-title">No slowgrammers inducted yet.</p>
+        <p class="empty-sub">The scraper is out looking. The plaques are cast and waiting.</p>
       </div>
     </section>
 
-    <footer class="colophon">
-      <p>Quotes are verbatim public posts from accounts with 10k+ followers, linked to the source. Satire.</p>
-    </footer>
-  </main>
+    <aside class="booth" aria-labelledby="booth-title">
+      <div class="booth-inner">
+        <h2 id="booth-title">Voting booth</h2>
+        <p class="booth-note">There is no vote button. You tell the AI who deserves it, and the AI votes for you. One vote per person, per inductee, per day.</p>
+        <ol id="transcript" class="transcript" aria-live="polite" aria-label="Conversation with the voting agent">
+          <li class="agent intro"><span class="who">Clerk</span>Name an inductee and I will vote on your behalf. Someone has to do the typing around here.</li>
+        </ol>
+        <form id="agent-form" class="booth-form">
+          <label for="agent-message" class="visually-hidden">Your request to the voting clerk</label>
+          <textarea id="agent-message" name="message" rows="3" maxlength="500" required placeholder="Vote for @someone, they still hand roll their regexes."></textarea>
+          <div class="booth-actions">
+            <span id="char-count" class="char-count" aria-live="off">0 / 500</span>
+            <button type="submit" id="agent-submit">Ask the clerk</button>
+          </div>
+        </form>
+      </div>
+    </aside>
+  </div>
+
+  <footer class="colophon">
+    <p>Quotes are verbatim public posts from accounts with 10k+ followers, linked to the source. Satire. New inductees are found every six hours by an AI agent browsing X, which is the whole point.</p>
+  </footer>
 </div>
 
 <template id="entry-template">
-  <li class="entry">
-    <div class="entry-rank"><span class="rank-num"></span></div>
-    <div class="entry-body">
-      <div class="entry-who">
-        <h3 class="entry-name"></h3>
-        <a class="entry-handle" rel="noopener noreferrer" target="_blank"></a>
-        <span class="entry-followers"></span>
-      </div>
-      <blockquote class="entry-quote"><p></p></blockquote>
-      <p class="entry-meta">
-        <span class="entry-date"></span>
-        <a class="entry-post" rel="noopener noreferrer" target="_blank">View post</a>
-      </p>
+  <li class="plaque">
+    <div class="plaque-top">
+      <span class="rank"><span class="rank-label">No.</span><span class="rank-num"></span></span>
+      <span class="medal" aria-label="">
+        <span class="votes-num"></span>
+        <span class="votes-label"></span>
+      </span>
     </div>
-    <div class="entry-votes"><span class="votes-num"></span><span class="votes-label"></span></div>
+    <h3 class="plaque-name"></h3>
+    <p class="plaque-who">
+      <a class="plaque-handle" rel="noopener noreferrer" target="_blank"></a>
+      <span class="plaque-followers"></span>
+    </p>
+    <blockquote class="plaque-quote"><p></p></blockquote>
+    <div class="plaque-foot">
+      <span class="plaque-date"></span>
+      <a class="plaque-post" rel="noopener noreferrer" target="_blank">Source</a>
+      <button type="button" class="plaque-vote">Ask the clerk to vote</button>
+    </div>
   </li>
 </template>
 </body>
